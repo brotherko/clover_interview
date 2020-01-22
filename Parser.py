@@ -10,6 +10,10 @@ class Parser:
         self.loadFormat(path_to_file)
         self.debug()
 
+    @property
+    def data(self):
+        return self.asObject()
+
     def loadFormat(self, path_to_file):
         contents = FileHelper.readFormatFile(path_to_file)
         # remove first row
@@ -30,8 +34,7 @@ class Parser:
                 rowMap[field.name] = field.parse(row)
             self.data.append(rowMap)
 
-    @property
-    def outputAsObject(self):
+    def asObject(self):
         return self.data
 
     def debug(self):
