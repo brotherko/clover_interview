@@ -15,7 +15,7 @@ class FileHelper:
         except OSError as err:
             print(err)
         except:
-            print "Unexpected error:", sys.exc_info()[0]
+            print("Unexpected error:", sys.exc_info()[0])
 
     @classmethod
     def readFormatFile(self, path_to_file):

@@ -1,6 +1,7 @@
 import csv
 from fields import Field
 from helpers import FileHelper
+from enums import DataType
 
 
 class Parser:
@@ -10,10 +11,6 @@ class Parser:
         self.loadFormat(path_to_file)
         self.debug()
 
-    @property
-    def data(self):
-        return self.asObject()
-
     def loadFormat(self, path_to_file):
         contents = FileHelper.readFormatFile(path_to_file)
         # remove first row
@@ -21,7 +18,8 @@ class Parser:
 
         start_at = 0
         for field_data in contents:
-            field = Field(field_data + [start_at])
+            name, width, data_type = field_data
+            field = Field.create(name, width, start_at, data_type)
             start_at += field.width
             self.fields.append(field)
 
