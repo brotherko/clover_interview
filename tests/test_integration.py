@@ -13,7 +13,7 @@ def output_pharser_result(format_file_input, data_file_input):
     return parser.asObject()
 
 
-class TestPharser(unittest.TestCase):
+class TestIntegration(unittest.TestCase):
     def setUp(self):
         pass
 

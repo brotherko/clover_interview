@@ -6,8 +6,8 @@ class TestFields_valid(unittest.TestCase):
     def setUp(self):
         self.data = "abc012345"
 
-    def test_StringField(self):
-        field = StringField("test", 3, 0)
+    def test_TextField(self):
+        field = TextField("test", 3, 0)
         expect = "abc"
         self.assertEqual(field.parse(self.data), expect)
 
@@ -62,10 +62,10 @@ class TestIntegerField(unittest.TestCase):
         self.assertRaises(expect, self.field.parse, data)
 
 
-class TestStringField(unittest.TestCase):
+class TestTextField(unittest.TestCase):
 
     def setUp(self):
-        self.field = StringField("test", 5, 0)
+        self.field = TextField("test", 5, 0)
 
     def test_valid_string(self):
         data = "abc12"

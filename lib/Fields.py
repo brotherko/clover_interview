@@ -44,7 +44,7 @@ class Field(ABC):
         elif(data_type == DataType.INTEGER):
             return IntegerField(name, width, start_at)
         elif(data_type == DataType.TEXT):
-            return StringField(name, width, start_at)
+            return TextField(name, width, start_at)
 
     def parse(self, raw):
         data = self._get(raw)
@@ -63,11 +63,25 @@ class Field(ABC):
     def _parse(self, data):
         pass
 
+    def __eq__(self, other):
+        return (
+            type(self) == type(other)
+            and self.width == other.width
+            and self.name == other.name
+            and self.start_at == other.start_at
+        )
+
     def __str__(self):
         return '{}: name: {}, width: {}, start_at: {}'.format(self.__class__.__name__, self.name, self.width, self.start_at)
 
 
 class BooleanField(Field):
+    def __init__(self, name, width, start_at):
+        super().__init__(name, width, start_at)
+        if(self.width != 1):
+            raise ValueError(
+                "The width of Boolean should be 1, found {}".format(width))
+
     def _validate(self, data):
         super()._validate(data)
         if(not re.match(r'[0,1]', data)):
@@ -89,7 +103,7 @@ class IntegerField(Field):
         return int(data)
 
 
-class StringField(Field):
+class TextField(Field):
     def _validate(self, data):
         super()._validate(data)
         data = data.strip()
