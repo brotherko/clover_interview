@@ -73,9 +73,9 @@ class Field(ABC):
 class BooleanField(Field):
     def _validate(self, data):
         super()._validate(data)
-        if(data not in [1, 0, "1", "0"]):
+        if(not re.match(r'[0,1]', data)):
             raise ValueError(
-                "Boolean field should be in the set of 1 and 0, found {}".format(data))
+                "The {} field should be either 1 or 0, found {}".format(self.name, data))
 
     def _parse(self, data):
         return bool(int(data))
@@ -86,7 +86,7 @@ class IntegerField(Field):
         super()._validate(data)
         if(not re.match(r'^\W*?-?[0-9]*\W*$', data)):
             raise ValueError(
-                "Integer Field should be numeric value, found {}".format(data))
+                "The {} field should be numeric value, found {}".format(self.name, data))
 
     def _parse(self, data):
         return int(data)
@@ -95,6 +95,9 @@ class IntegerField(Field):
 class StringField(Field):
     def _validate(self, data):
         super()._validate(data)
+        if(not data.isalnum()):
+            raise ValueError(
+                "The {} field should only contain alphabet and number value, found {}".format(self.name, data))
 
     def _parse(self, data):
         return data.strip()
