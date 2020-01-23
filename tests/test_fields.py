@@ -2,7 +2,7 @@ from lib.fields import *
 import unittest
 
 
-class TestFields(unittest.TestCase):
+class TestFields_valid(unittest.TestCase):
     def setUp(self):
         self.data = "abc012345"
 

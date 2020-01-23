@@ -1,4 +1,5 @@
 import sys
+import re
 from abc import ABC
 from lib.enums import DataType
 
@@ -45,17 +46,24 @@ class Field(ABC):
         elif(data_type == DataType.TEXT):
             return StringField(name, width, start_at)
 
-    def _get(self, data):
+    def parse(self, raw):
+        data = self._get(raw)
+        try:
+            self._validate(data)
+        except ValueError as e:
+            exit("These are problem with the data '{}': {}".format(raw, e))
+        return self._parse(data)
+
+    def _get(self, raw):
         start_idx = self.start_at
         end_idx = self.start_at+self.width
-        data = data[start_idx:end_idx]
+        data = raw[start_idx:end_idx]
         return data
 
-    def validate(self):
-        data = self._get(data)
+    def _validate(self, data):
         pass
 
-    def parse(self, data):
+    def _parse(self, data):
         pass
 
     def __str__(self):
@@ -63,29 +71,30 @@ class Field(ABC):
 
 
 class BooleanField(Field):
-    def validate(self, data):
-        super().validate(data)
+    def _validate(self, data):
+        super()._validate(data)
         if(data not in [1, 0, "1", "0"]):
-            raise ValueError("")
+            raise ValueError(
+                "Boolean field should be in the set of 1 and 0, found {}".format(data))
 
-    def parse(self, data):
-        return bool(int(self._get(data)))
+    def _parse(self, data):
+        return bool(int(data))
 
 
 class IntegerField(Field):
-    def validate(self, data):
-        super().validate(data)
-        if(not data.isnumeric()):
-            raise ValueError("")
+    def _validate(self, data):
+        super()._validate(data)
+        if(not re.match(r'^\W*?-?[0-9]*\W*$', data)):
+            raise ValueError(
+                "Integer Field should be numeric value, found {}".format(data))
 
-    def parse(self, data):
-        return int(self._get(data))
+    def _parse(self, data):
+        return int(data)
 
 
 class StringField(Field):
+    def _validate(self, data):
+        super()._validate(data)
 
-    def validate(self, data):
-        super().validate(data)
-
-    def parse(self, data):
-        return self._get(data).strip()
+    def _parse(self, data):
+        return data.strip()
