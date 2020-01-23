@@ -17,9 +17,14 @@ class Parser:
         contents = contents[1::]
 
         start_at = 0
-        for field_data in contents:
+        for field_data_idx, field_data in enumerate(contents):
             name, width, data_type = field_data
-            field = Field.create(name, width, start_at, data_type)
+            try:
+                field = Field.create(name, width, start_at, data_type)
+            except Exception as e:
+                raise Exception(
+                    "There is problem with the spec string on line {}".format(field_data_idx+2))
+
             start_at += field.width
             self.fields.append(field)
 
