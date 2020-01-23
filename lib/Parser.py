@@ -14,10 +14,8 @@ class Parser:
 
     def loadFormat(self, path_to_file):
         contents = FileHelper.readFormatFile(path_to_file)
-        # remove first row
-        contents = contents[1::]
-
         start_at = 0
+
         for field_data_idx, field_data in enumerate(contents):
             try:
                 name, width, data_type = field_data

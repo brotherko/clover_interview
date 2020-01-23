@@ -46,6 +46,16 @@ class TestIntegerField(unittest.TestCase):
         expect = ValueError
         self.assertRaises(expect, self.field.parse, data)
 
+    def test_spaces(self):
+        data = "     "
+        expect = ValueError
+        self.assertRaises(expect, self.field.parse, data)
+
+    def test_2minus(self):
+        data = "--"
+        expect = ValueError
+        self.assertRaises(expect, self.field.parse, data)
+
     def test_decimal(self):
         data = "0.333"
         expect = ValueError
@@ -74,6 +84,11 @@ class TestStringField(unittest.TestCase):
 
     def test_empty(self):
         data = ""
+        expect = ""
+        self.assertEqual(self.field.parse(data), expect)
+
+    def test_many_empty(self):
+        data = "    "
         expect = ""
         self.assertEqual(self.field.parse(data), expect)
 
