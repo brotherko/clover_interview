@@ -1,4 +1,5 @@
 import csv
+import sys
 from lib.fields import Field
 from lib.helpers import FileHelper
 from lib.enums import DataType
@@ -20,15 +21,13 @@ class Parser:
         for field_data_idx, field_data in enumerate(contents):
             try:
                 name, width, data_type = field_data
-            except ValueError as e:
-                raise ValueError(
-                    "The field defination on line {} is not correct".format(field_data_idx+2))
-
-            try:
                 field = Field.create(name, width, start_at, data_type)
+            except ValueError as e:
+                sys.exit("The format defination file on line {} is not correct: {}".format(
+                    field_data_idx+2, e))
             except Exception as e:
-                raise Exception(
-                    "There is problem with the spec string on line {}".format(field_data_idx+2))
+                sys.exit("Unexpected Error in format defination on line {}: {}".format(
+                    field_data_idx+2, e))
 
             start_at += field.width
             self.fields.append(field)

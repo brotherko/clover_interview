@@ -10,12 +10,12 @@ class FileHelper:
         try:
             with open(path_to_file) as fp:
                 return func(fp)
-        except FileNotFoundError as err:
-            print(err)
-        except OSError as err:
-            print(err)
+        except FileNotFoundError as e:
+            sys.exit("Couldn't find the given file: {}".format(e))
+        except OSError as e:
+            sys.exit("Couldn't read the given file: {}".format(e))
         except:
-            print("Unexpected error:", sys.exc_info()[0])
+            sys.exit("Unexpected error: {}".format(sys.exc_info()[0]))
 
     @classmethod
     def readFormatFile(self, path_to_file):

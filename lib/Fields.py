@@ -1,3 +1,4 @@
+import sys
 from abc import ABC
 from lib.enums import DataType
 
@@ -10,24 +11,29 @@ class Field(ABC):
 
     @classmethod
     def create(self, name, width, start_at, data_type):
+        _name, _width, _start_at, _data_type = self._convertAndValidateParam(
+            name, width, start_at, data_type)
+        return self._mapField(_name, _width, _start_at, _data_type)
+
+    @staticmethod
+    def _convertAndValidateParam(name, width, start_at, data_type):
 
         try:
             _name = str(name)
         except ValueError:
-            raise ValueError("Couldn't convert column name to str")
+            sys.exit("Couldn't convert the column name to str")
 
         try:
             _width = int(width)
         except ValueError:
-            raise ValueError("Couldn't convert width to integer")
+            sys.exit("Couldn't convert the width value to int")
 
         try:
             _data_type = DataType(data_type)
         except ValueError:
-            raise ValueError(
-                "{} is not a valid data type".format(data_type))
+            sys.exit("{} is not a valid data type".format(data_type))
 
-        return self._mapField(_name, _width, start_at, _data_type)
+        return [_name, _width, start_at, _data_type]
 
     @staticmethod
     def _mapField(name, width, start_at, data_type):
