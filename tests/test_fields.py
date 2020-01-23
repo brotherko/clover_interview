@@ -43,10 +43,66 @@ class TestIntegerField(unittest.TestCase):
 
     def test_alpha(self):
         data = "abcde"
-        expect = SystemExit
+        expect = ValueError
         self.assertRaises(expect, self.field.parse, data)
 
     def test_decimal(self):
         data = "0.333"
-        expect = SystemExit
+        expect = ValueError
+        self.assertRaises(expect, self.field.parse, data)
+
+
+class TestStringField(unittest.TestCase):
+
+    def setUp(self):
+        self.field = StringField("test", 5, 0)
+
+    def test_valid_string(self):
+        data = "abc12"
+        expect = "abc12"
+        self.assertEqual(self.field.parse(data), expect)
+
+    def test_non_alnum(self):
+        data = "r�s-*"
+        expect = ValueError
+        self.assertRaises(expect, self.field.parse, data)
+
+    def test_mix_empty_alnum(self):
+        data = "ab 12"
+        expect = "ab 12"
+        self.assertEqual(self.field.parse(data), expect)
+
+    def test_empty(self):
+        data = ""
+        expect = ""
+        self.assertEqual(self.field.parse(data), expect)
+
+    def test_mix_non_alnum(self):
+        data = "r�sab"
+        expect = ValueError
+        self.assertRaises(expect, self.field.parse, data)
+
+
+class TestBooleanField(unittest.TestCase):
+    def setUp(self):
+        self.field = BooleanField("test", 1, 0)
+
+    def test_true(self):
+        data = "1"
+        expect = True
+        self.assertEqual(self.field.parse(data), expect)
+
+    def test_false(self):
+        data = "0"
+        expect = False
+        self.assertEqual(self.field.parse(data), expect)
+
+    def test_non_10(self):
+        data = "a"
+        expect = ValueError
+        self.assertRaises(expect, self.field.parse, data)
+
+    def test_space(self):
+        data = " "
+        expect = ValueError
         self.assertRaises(expect, self.field.parse, data)

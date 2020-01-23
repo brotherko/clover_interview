@@ -48,10 +48,7 @@ class Field(ABC):
 
     def parse(self, raw):
         data = self._get(raw)
-        try:
-            self._validate(data)
-        except ValueError as e:
-            exit("These are problem with the data '{}': {}".format(raw, e))
+        self._validate(data)
         return self._parse(data)
 
     def _get(self, raw):
@@ -95,9 +92,10 @@ class IntegerField(Field):
 class StringField(Field):
     def _validate(self, data):
         super()._validate(data)
-        if(not data.isalnum()):
+        data = data.strip()
+        if(not re.match(r'^[a-zA-Z0-9 ]*$', data)):
             raise ValueError(
-                "The {} field should only contain alphabet and number value, found {}".format(self.name, data))
+                "The {} field should only contain alphabet, number and space, found {}".format(self.name, data))
 
     def _parse(self, data):
         return data.strip()
