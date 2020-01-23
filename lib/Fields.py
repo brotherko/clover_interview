@@ -1,5 +1,5 @@
 from abc import ABC
-from enums import DataType
+from lib.enums import DataType
 
 
 class Field(ABC):

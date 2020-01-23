@@ -1,7 +1,7 @@
 import csv
-from fields import Field
-from helpers import FileHelper
-from enums import DataType
+from lib.Fields import Field
+from lib.Helpers import FileHelper
+from lib.enums import DataType
 
 
 class Parser:

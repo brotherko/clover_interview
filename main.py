@@ -1,4 +1,4 @@
-from Parser import Parser
+from lib.Parser import Parser
 
 
 def parse_flatfile(datafilename, formatfilename):
