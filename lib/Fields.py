@@ -29,6 +29,10 @@ class Field(ABC):
         except ValueError:
             sys.exit("Couldn't convert the width value to int")
 
+        if(_width <= 0):
+            raise ValueError(
+                'Width much be larger than 0, found: {}'.format(_width))
+
         try:
             _data_type = DataType(data_type)
         except ValueError:
