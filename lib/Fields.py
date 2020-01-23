@@ -59,12 +59,11 @@ class Field(ABC):
 class BooleanField(Field):
     def validate(self, data):
         super().validate(data)
-        print(data)
-        if(data not in [1, 0]):
+        if(data not in [1, 0, "1", "0"]):
             raise ValueError("")
 
     def parse(self, data):
-        return bool(self._get(data))
+        return bool(int(self._get(data)))
 
 
 class IntegerField(Field):

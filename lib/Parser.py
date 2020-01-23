@@ -1,6 +1,6 @@
 import csv
-from lib.Fields import Field
-from lib.Helpers import FileHelper
+from lib.fields import Field
+from lib.helpers import FileHelper
 from lib.enums import DataType
 
 
@@ -18,7 +18,12 @@ class Parser:
 
         start_at = 0
         for field_data_idx, field_data in enumerate(contents):
-            name, width, data_type = field_data
+            try:
+                name, width, data_type = field_data
+            except ValueError as e:
+                raise ValueError(
+                    "The field defination on line {} is not correct".format(field_data_idx+2))
+
             try:
                 field = Field.create(name, width, start_at, data_type)
             except Exception as e:
@@ -30,7 +35,6 @@ class Parser:
 
     def loadData(self, path_to_file):
         contents = FileHelper.readDataFile(path_to_file)
-
         for row in contents:
             rowMap = {}
             for field_idx, field in enumerate(self.fields):

@@ -1,4 +1,4 @@
-from lib.Helpers import FileHelper
+from lib.helpers import FileHelper
 import tempfile
 import unittest
 import textwrap
