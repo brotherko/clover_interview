@@ -6,7 +6,7 @@ import os
 class FileHelper:
 
     @classmethod
-    def readFile(self, path_to_file, func):
+    def _readFile(self, path_to_file, func):
         try:
             with open(path_to_file) as fp:
                 return func(fp)
@@ -19,8 +19,10 @@ class FileHelper:
 
     @classmethod
     def readFormatFile(self, path_to_file):
-        return self.readFile(path_to_file, lambda fp: list(csv.reader(fp)))
+        contents = self._readFile(
+            path_to_file, lambda fp: list(csv.reader(fp)))
+        return contents
 
     @classmethod
     def readDataFile(self, path_to_file):
-        return self.readFile(path_to_file, lambda fp: list(line.rstrip('\n') for line in fp))
+        return self._readFile(path_to_file, lambda fp: list(line.rstrip('\n') for line in fp))
